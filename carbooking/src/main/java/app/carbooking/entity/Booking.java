@@ -26,6 +26,8 @@ public class Booking {
 
     private LocalDateTime endDateTime;
 
+    private LocalDateTime creationDateTime;
+
     private Double totalPrice;
 
     // getters and setters
@@ -77,4 +79,13 @@ public class Booking {
     public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
+
+    public LocalDateTime getCreationDateTime() {
+        return creationDateTime;
+    }
+
+    public void setCreationDateTime(LocalDateTime creationDateTime) {
+        this.creationDateTime = creationDateTime;
+    }
 }
+

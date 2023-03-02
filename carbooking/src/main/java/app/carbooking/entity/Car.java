@@ -28,6 +28,8 @@ public class Car {
     @Column(nullable = false)
     private boolean isAvailable;
 
+    private Integer ownerId;
+
     public int getId() {
         return id;
     }
@@ -99,5 +101,13 @@ public class Car {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public Integer getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Integer ownerId) {
+        this.ownerId = ownerId;
     }
 }
