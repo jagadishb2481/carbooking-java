@@ -3,10 +3,14 @@ package app.carbooking.controller;
 import app.carbooking.entity.Car;
 import app.carbooking.exception.ResourceNotFoundException;
 import app.carbooking.repository.CarRepository;
+import app.carbooking.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 @CrossOrigin(origins = "*")
 @RestController
@@ -15,6 +19,9 @@ public class CarController {
 
     @Autowired
     private CarRepository carRepository;
+    @Autowired
+    CarService carService;
+
 
     @GetMapping("")
     public List<Car> getAllCars() {
@@ -27,25 +34,48 @@ public class CarController {
                 .orElseThrow(() -> new ResourceNotFoundException("Car", "id", id));
     }
 
-    @PostMapping("")
-    public Car createCar(@RequestBody Car car) {
-        car.setAvailable(true);
-        return carRepository.save(car);
+    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Car createCar( @RequestParam(value = "image", required = false) MultipartFile image,
+                          @RequestParam("name") String name, @RequestParam("model") String model,
+                          @RequestParam("makeYear") String makeYear, @RequestParam("carType") String carType,
+                          @RequestParam("color") String color, @RequestParam("pricePerDay") String pricePerDay,
+                          @RequestParam("available") String available, @RequestParam("plateNumber") String plateNumber) throws IOException {
+        Car car = new Car();
+       car.setName(name);
+       car.setModel(model);
+       car.setColor(color);
+       car.setMakeYear(Integer.parseInt(makeYear));
+       car.setCarType(carType);
+       car.setAvailable(Boolean.parseBoolean(available));
+       car.setPricePerDay(Double.parseDouble(pricePerDay));
+       car.setPlateNumber(plateNumber);
+        System.out.println("isfile null"+ (null==image));
+        System.out.println("car:"+car);
+        if(image!=null){
+        car.setImage(image.getBytes());}
+        return carService.addCar(car);
     }
 
-    @PutMapping("/{id}")
-    public Car updateCar(@PathVariable int id, @RequestBody Car carDetails) {
+    @PutMapping(value="/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Car updateCar(@PathVariable int id, @RequestParam(value = "image", required = false) MultipartFile image,
+                         @RequestParam("name") String name, @RequestParam("model") String model,
+                         @RequestParam("makeYear") String makeYear, @RequestParam("carType") String carType,
+                         @RequestParam("color") String color, @RequestParam("pricePerDay") String pricePerDay,
+                         @RequestParam("available") String available, @RequestParam("plateNumber") String plateNumber) throws IOException {
         Car car = carRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Car", "id", id));
-
-        car.setName(carDetails.getName());
-        car.setModel(carDetails.getModel());
-        car.setMakeYear(carDetails.getMakeYear());
-        car.setPricePerDay(carDetails.getPricePerDay());
-        car.setAvailable(carDetails.isAvailable());
-        car.setColor(carDetails.getColor());
-        car.setCarType(carDetails.getCarType());
-        car.setPlateNumber(carDetails.getPlateNumber());
+        car.setName(name);
+        car.setModel(model);
+        car.setColor(color);
+        car.setMakeYear(Integer.parseInt(makeYear));
+        car.setCarType(carType);
+        car.setAvailable(Boolean.parseBoolean(available));
+        car.setPricePerDay(Double.parseDouble(pricePerDay));
+        car.setPlateNumber(plateNumber);
+        System.out.println("isfile null"+ (null==image));
+        System.out.println("car:"+car);
+        if(image!=null){
+            car.setImage(image.getBytes());}
         return carRepository.save(car);
     }
 
@@ -53,9 +83,7 @@ public class CarController {
     public ResponseEntity<?> deleteCar(@PathVariable int id) {
         Car car = carRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Car", "id", id));
-
         carRepository.delete(car);
-
         return ResponseEntity.ok().build();
     }
 }

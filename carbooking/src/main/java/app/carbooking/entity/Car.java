@@ -3,6 +3,7 @@ package app.carbooking.entity;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Arrays;
 
 @NoArgsConstructor
 @Entity
@@ -29,6 +30,9 @@ public class Car {
     private boolean isAvailable;
 
     private Integer ownerId;
+    @Lob
+    @Column(name = "image")
+    private byte[] image;
 
     public int getId() {
         return id;
@@ -109,5 +113,30 @@ public class Car {
 
     public void setOwnerId(Integer ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "id=" + id +
+                ", plateNumber='" + plateNumber + '\'' +
+                ", name='" + name + '\'' +
+                ", model='" + model + '\'' +
+                ", makeYear=" + makeYear +
+                ", color='" + color + '\'' +
+                ", carType='" + carType + '\'' +
+                ", pricePerDay=" + pricePerDay +
+                ", isAvailable=" + isAvailable +
+                ", ownerId=" + ownerId +
+                ", image=" + Arrays.toString(image) +
+                '}';
     }
 }
