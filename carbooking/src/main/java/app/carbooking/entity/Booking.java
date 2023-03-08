@@ -27,7 +27,13 @@ public class Booking {
     private LocalDateTime endDateTime;
 
     private LocalDateTime creationDateTime;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pickup_location_id")
+    private Location pickupLocation;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "return_locationId")
+    private Location returnLocation;
     private Double totalPrice;
 
     // getters and setters
@@ -86,6 +92,22 @@ public class Booking {
 
     public void setCreationDateTime(LocalDateTime creationDateTime) {
         this.creationDateTime = creationDateTime;
+    }
+
+    public Location getPickupLocation() {
+        return pickupLocation;
+    }
+
+    public void setPickupLocation(Location pickupLocation) {
+        this.pickupLocation = pickupLocation;
+    }
+
+    public Location getReturnLocation() {
+        return returnLocation;
+    }
+
+    public void setReturnLocation(Location returnLocation) {
+        this.returnLocation = returnLocation;
     }
 }
 

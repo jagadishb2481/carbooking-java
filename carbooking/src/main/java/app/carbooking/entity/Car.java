@@ -26,13 +26,17 @@ public class Car {
     private String carType;
     @Column(nullable = false)
     private Double pricePerDay;
-    @Column(nullable = false)
-    private boolean isAvailable;
 
     private Integer ownerId;
+
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "locationId")
+    private Location location;
     @Lob
     @Column(name = "image")
     private byte[] image;
+
 
     public int getId() {
         return id;
@@ -72,14 +76,6 @@ public class Car {
 
     public void setPricePerDay(Double pricePerDay) {
         this.pricePerDay = pricePerDay;
-    }
-
-    public boolean isAvailable() {
-        return isAvailable;
-    }
-
-    public void setAvailable(boolean available) {
-        isAvailable = available;
     }
 
     public String getPlateNumber() {
@@ -123,6 +119,14 @@ public class Car {
         this.image = image;
     }
 
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
     @Override
     public String toString() {
         return "Car{" +
@@ -134,7 +138,6 @@ public class Car {
                 ", color='" + color + '\'' +
                 ", carType='" + carType + '\'' +
                 ", pricePerDay=" + pricePerDay +
-                ", isAvailable=" + isAvailable +
                 ", ownerId=" + ownerId +
                 ", image=" + Arrays.toString(image) +
                 '}';

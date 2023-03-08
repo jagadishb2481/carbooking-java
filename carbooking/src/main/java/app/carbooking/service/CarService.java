@@ -32,7 +32,7 @@ public class CarService {
             existingCar.setModel(car.getModel());
             existingCar.setMakeYear(car.getMakeYear());
             existingCar.setPricePerDay(car.getPricePerDay());
-            existingCar.setAvailable(car.isAvailable());
+
             return carRepository.save(existingCar);
         } else {
             return null;

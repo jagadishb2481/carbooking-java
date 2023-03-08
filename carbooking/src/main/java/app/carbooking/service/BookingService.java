@@ -1,8 +1,12 @@
 package app.carbooking.service;
 
 import app.carbooking.entity.Booking;
+import app.carbooking.entity.Car;
 import app.carbooking.exception.ResourceNotFoundException;
+import app.carbooking.model.AvailableBookingRequest;
 import app.carbooking.repository.BookingRepository;
+import app.carbooking.repository.CarRepository;
+import app.carbooking.util.CarBookingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +16,8 @@ import java.util.List;
 public class BookingService {
 
     private final BookingRepository bookingRepository;
-
+    @Autowired
+    CarRepository carRepository;
     @Autowired
     public BookingService(BookingRepository bookingRepository) {
         this.bookingRepository = bookingRepository;
@@ -45,4 +50,13 @@ public class BookingService {
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
+
+    public List<Car> getAvailableCars(AvailableBookingRequest availableBookingRequest) {
+        System.out.println(availableBookingRequest);
+//        return carRepository.findAvailableCars(//availableBookingRequest.getLocation().getId(),
+//                CarBookingUtil.stringToLocalDateTime(availableBookingRequest.getFromDate()),
+//                CarBookingUtil.stringToLocalDateTime(availableBookingRequest.getToDate()));
+        return carRepository.findAvailableCars(availableBookingRequest.getLocation().getId(), availableBookingRequest.getFromDate(), availableBookingRequest.getToDate());
+    }
+
 }

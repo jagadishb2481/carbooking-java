@@ -1,9 +1,11 @@
 package app.carbooking.controller;
 
 import app.carbooking.entity.Car;
+import app.carbooking.entity.Location;
 import app.carbooking.exception.ResourceNotFoundException;
 import app.carbooking.repository.CarRepository;
 import app.carbooking.service.CarService;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/cars")
@@ -35,33 +38,37 @@ public class CarController {
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Car createCar( @RequestParam(value = "image", required = false) MultipartFile image,
-                          @RequestParam("name") String name, @RequestParam("model") String model,
-                          @RequestParam("makeYear") String makeYear, @RequestParam("carType") String carType,
-                          @RequestParam("color") String color, @RequestParam("pricePerDay") String pricePerDay,
-                          @RequestParam("available") String available, @RequestParam("plateNumber") String plateNumber) throws IOException {
+    public Car createCar(@RequestParam(value = "image", required = false) MultipartFile image,
+                         @RequestParam("name") String name, @RequestParam("model") String model,
+                         @RequestParam("makeYear") String makeYear, @RequestParam("carType") String carType,
+                         @RequestParam("color") String color, @RequestParam("pricePerDay") String pricePerDay,
+                         @RequestParam("location") String locationJsonString, @RequestParam("plateNumber") String plateNumber) throws IOException {
         Car car = new Car();
-       car.setName(name);
-       car.setModel(model);
-       car.setColor(color);
-       car.setMakeYear(Integer.parseInt(makeYear));
-       car.setCarType(carType);
-       car.setAvailable(Boolean.parseBoolean(available));
-       car.setPricePerDay(Double.parseDouble(pricePerDay));
-       car.setPlateNumber(plateNumber);
-        System.out.println("isfile null"+ (null==image));
-        System.out.println("car:"+car);
-        if(image!=null){
-        car.setImage(image.getBytes());}
+        car.setName(name);
+        car.setModel(model);
+        car.setColor(color);
+        car.setMakeYear(Integer.parseInt(makeYear));
+        car.setCarType(carType);
+        System.out.println("locationJsonString: " + locationJsonString);
+        Gson gson = new Gson();
+        Location location = gson.fromJson(locationJsonString, Location.class);
+        car.setLocation(location);
+        car.setPricePerDay(Double.parseDouble(pricePerDay));
+        car.setPlateNumber(plateNumber);
+        System.out.println("isfile null" + (null == image));
+        System.out.println("car:" + car);
+        if (image != null) {
+            car.setImage(image.getBytes());
+        }
         return carService.addCar(car);
     }
 
-    @PutMapping(value="/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Car updateCar(@PathVariable int id, @RequestParam(value = "image", required = false) MultipartFile image,
                          @RequestParam("name") String name, @RequestParam("model") String model,
                          @RequestParam("makeYear") String makeYear, @RequestParam("carType") String carType,
                          @RequestParam("color") String color, @RequestParam("pricePerDay") String pricePerDay,
-                         @RequestParam("available") String available, @RequestParam("plateNumber") String plateNumber) throws IOException {
+                         @RequestParam("location") String locationJsonString, @RequestParam("plateNumber") String plateNumber) throws IOException {
         Car car = carRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Car", "id", id));
         car.setName(name);
@@ -69,13 +76,18 @@ public class CarController {
         car.setColor(color);
         car.setMakeYear(Integer.parseInt(makeYear));
         car.setCarType(carType);
-        car.setAvailable(Boolean.parseBoolean(available));
         car.setPricePerDay(Double.parseDouble(pricePerDay));
         car.setPlateNumber(plateNumber);
-        System.out.println("isfile null"+ (null==image));
-        System.out.println("car:"+car);
-        if(image!=null){
-            car.setImage(image.getBytes());}
+        System.out.println("isfile null" + (null == image));
+        System.out.println("car:" + car);
+        if (image != null) {
+            car.setImage(image.getBytes());
+        }
+        if(locationJsonString!=null && !locationJsonString.isEmpty()){
+            Gson gson = new Gson();
+            Location location = gson.fromJson(locationJsonString, Location.class);
+            car.setLocation(location);
+        }
         return carRepository.save(car);
     }
 
