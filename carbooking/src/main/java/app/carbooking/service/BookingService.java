@@ -18,6 +18,10 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     @Autowired
     CarRepository carRepository;
+
+    @Autowired
+    RatingService ratingService;
+
     @Autowired
     public BookingService(BookingRepository bookingRepository) {
         this.bookingRepository = bookingRepository;
@@ -53,9 +57,11 @@ public class BookingService {
 
     public List<Car> getAvailableCars(AvailableBookingRequest availableBookingRequest) {
         System.out.println(availableBookingRequest);
-//        return carRepository.findAvailableCars(//availableBookingRequest.getLocation().getId(),
-//                CarBookingUtil.stringToLocalDateTime(availableBookingRequest.getFromDate()),
-//                CarBookingUtil.stringToLocalDateTime(availableBookingRequest.getToDate()));
+        List<Car> availableCars = carRepository.findAvailableCars(availableBookingRequest.getLocation().getId(), availableBookingRequest.getFromDate(), availableBookingRequest.getToDate());
+
+        availableCars.forEach(car -> {
+          ratingService.getAverageRatingForCar(car);
+        });
         return carRepository.findAvailableCars(availableBookingRequest.getLocation().getId(), availableBookingRequest.getFromDate(), availableBookingRequest.getToDate());
     }
 

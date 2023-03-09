@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,6 +16,6 @@ import java.time.LocalDateTime;
 public class AvailableBookingRequest {
 
     Location location;
-    LocalDateTime fromDate;
-    LocalDateTime toDate;
+    LocalDate fromDate;
+    LocalDate toDate;
 }

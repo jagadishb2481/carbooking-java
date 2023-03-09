@@ -1,11 +1,17 @@
 package app.carbooking.entity;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @NoArgsConstructor
+@Setter
+@Getter
 @Entity
 @Table(name = "bookings")
 public class Booking {
@@ -25,6 +31,11 @@ public class Booking {
     private LocalDateTime startDateTime;
 
     private LocalDateTime endDateTime;
+
+    private LocalDate startDate;
+
+    private LocalDate endDate;
+
 
     private LocalDateTime creationDateTime;
     @ManyToOne(fetch = FetchType.LAZY)
