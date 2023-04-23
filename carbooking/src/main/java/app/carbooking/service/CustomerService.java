@@ -4,6 +4,7 @@ import app.carbooking.entity.Customer;
 import app.carbooking.exception.ResourceNotFoundException;
 import app.carbooking.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +25,8 @@ public class CustomerService {
     }
 
     public Customer createCustomer(Customer customer) {
+        customer.setPwd(customer.getPassword());
+        customer.setPassword(new BCryptPasswordEncoder().encode(customer.getPassword()));
         return customerRepository.save(customer);
     }
 
@@ -31,11 +34,12 @@ public class CustomerService {
         Customer customer = getCustomerById(customerId);
         customer.setName(customerDetails.getName());
         customer.setUsername(customerDetails.getUsername());
-        customer.setPassword(customerDetails.getPassword());
+        customer.setPassword(new BCryptPasswordEncoder().encode(customerDetails.getPassword()));
         customer.setEmail(customerDetails.getEmail());
         customer.setRole(customerDetails.getRole());
         customer.setPhoneNumber(customerDetails.getPhoneNumber());
         customer.setAddress(customerDetails.getAddress());
+        customer.setPwd(customerDetails.getPassword());
         return customerRepository.save(customer);
     }
 

@@ -6,12 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/locations")
 public class LocationController {
+
+    public LocationService locationService;
     @Autowired
-    private LocationService locationService;
+    public LocationController(LocationService locationService){
+        this.locationService=locationService;
+    }
 
     @GetMapping("")
     public List<Location> getAllLocations() {

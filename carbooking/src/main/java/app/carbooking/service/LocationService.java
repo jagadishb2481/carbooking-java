@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class LocationService {
     @Autowired
-    private LocationRepository locationRepository;
+    public LocationRepository locationRepository;
 
     public List<Location> getAllLocations() {
         return locationRepository.findAll();

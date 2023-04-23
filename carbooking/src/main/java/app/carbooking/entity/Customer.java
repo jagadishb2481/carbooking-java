@@ -34,7 +34,8 @@ public class Customer {
 
     @Column(nullable = false)
     private String address;
-
+    @Column(nullable = false)
+    private String pwd;
     // getters and setters
 
     public Long getId() {
@@ -99,5 +100,13 @@ public class Customer {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getPwd() {
+        return pwd;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
 }

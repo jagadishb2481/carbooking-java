@@ -13,10 +13,10 @@ public class RatingService {
     private RatingRepository ratingRepository;
     
     public Double getAverageRatingForCar(Car car) {
-        return ratingRepository.findAverageRatingByCar(car);
+        return null;//ratingRepository.findAverageRatingByCar(car);
     }
     
     public List<Car> getCarsWithHighestRatings() {
-        return ratingRepository.findCarsWithHighestRatings();
+        return null;//ratingRepository.findCarsWithHighestRatings();
     }
 }

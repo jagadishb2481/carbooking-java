@@ -1,16 +1,13 @@
 package app.carbooking.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
-@Getter
-@Setter
-@ToString
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "Locations")
 public class Location {
@@ -31,4 +28,13 @@ public class Location {
 
     // getters and setters
 
+    public Location(Integer id, String name, String address, String city, String state, String country, String zipcode) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.city = city;
+        this.state = state;
+        this.country = country;
+        this.zipcode = zipcode;
+    }
 }
