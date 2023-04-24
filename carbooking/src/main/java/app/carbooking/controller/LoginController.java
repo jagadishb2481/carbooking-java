@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.spring.web.json.Json;
 
@@ -38,9 +40,11 @@ public class LoginController {
     public TokenResponse generateToken(@RequestBody AuthRequest authRequest) throws Exception {
         TokenResponse tokenResponse = null;
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+            final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
             tokenResponse = new TokenResponse();
-            tokenResponse.setJwtToken(jwtUtil.generateToken(authRequest.getUsername()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            //final String token = jwtTokenUtil.generateToken(authentication);
+            tokenResponse.setJwtToken(jwtUtil.generateToken(authentication));
         } catch (Exception ex) {
             throw new Exception("inavalid username/password");
         }
